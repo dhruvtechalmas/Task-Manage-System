@@ -88,10 +88,13 @@ class TaskController extends Controller
 
         if ($request->user()->hasRole(UserRole::Employee->value)) {
             abort_unless($task->belongsToUser($request->user()), 403);
-            $employees = collect([$request->user()]);
-        } else {
-            $employees = User::role(UserRole::Employee->value)->get();
+
+            return view('employee.tasks.edit', [
+                'task' => $task,
+            ]);
         }
+
+        $employees = User::role(UserRole::Employee->value)->get();
 
         return view('super-admin.tasks.edit', [
             'task' => $task,

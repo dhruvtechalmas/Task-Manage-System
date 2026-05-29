@@ -46,6 +46,7 @@ class RolePermissionController extends Controller
             'permissions' => Permission::orderBy('name')->get(),
             'assignedPermissions' => $employee->getPermissionNames()->toArray(),
             'directPermissions' => $employee->getDirectPermissions()->pluck('name')->toArray(),
+            'rolePermissions' => $employee->getPermissionsViaRoles()->pluck('name')->toArray(),
         ]);
     }
 

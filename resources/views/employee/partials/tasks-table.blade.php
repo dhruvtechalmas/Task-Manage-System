@@ -30,49 +30,55 @@
                                 $hasAction = false;
                             @endphp
 
-                            @if ($task->isPending() && Auth::user()->can('start task'))
-                                @php $hasAction = true; @endphp
-                                <form method="POST" action="{{ route('employee.tasks.start', $task) }}">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit"
-                                        class="rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700">
-                                        Start
-                                    </button>
-                                </form>
-                            @endif
+                            @can('start task')
+                                @if ($task->isPending())
+                                    @php $hasAction = true; @endphp
+                                    <form method="POST" action="{{ route('employee.tasks.start', $task) }}">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit"
+                                            class="rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700">
+                                            Start
+                                        </button>
+                                    </form>
+                                @endif
+                            @endcan
 
-                            @if ($task->isInProgress() && Auth::user()->can('complete task'))
-                                @php $hasAction = true; @endphp
-                                <form method="POST" action="{{ route('employee.tasks.complete', $task) }}">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit"
-                                        class="rounded-lg bg-green-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-green-700">
-                                        Complete
-                                    </button>
-                                </form>
-                            @endif
+                            @can('complete task')
+                                @if ($task->isInProgress())
+                                    @php $hasAction = true; @endphp
+                                    <form method="POST" action="{{ route('employee.tasks.complete', $task) }}">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit"
+                                            class="rounded-lg bg-green-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-green-700">
+                                            Complete
+                                        </button>
+                                    </form>
+                                @endif
+                            @endcan
 
-                            @if ($task->belongsToUser(Auth::user()) && Auth::user()->can('edit task'))
-                                @php $hasAction = true; @endphp
-                                <a href="{{ route('tasks.edit', $task) }}"
-                                    class="rounded-lg bg-yellow-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-yellow-600">
-                                    Edit
-                                </a>
-                            @endif
+                            @if ($task->belongsToUser(Auth::user()))
+                                @can('edit task')
+                                    @php $hasAction = true; @endphp
+                                    <a href="{{ route('tasks.edit', $task) }}"
+                                        class="rounded-lg bg-yellow-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-yellow-600">
+                                        Edit
+                                    </a>
+                                @endcan
 
-                            @if ($task->belongsToUser(Auth::user()) && Auth::user()->can('delete task'))
-                                @php $hasAction = true; @endphp
-                                <form action="{{ route('tasks.destroy', $task) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="rounded-lg bg-red-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-700"
-                                        onclick="return confirm('Delete this task?')">
-                                        Delete
-                                    </button>
-                                </form>
+                                @can('delete task')
+                                    @php $hasAction = true; @endphp
+                                    <form action="{{ route('tasks.destroy', $task) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="rounded-lg bg-red-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-700"
+                                            onclick="return confirm('Delete this task?')">
+                                            Delete
+                                        </button>
+                                    </form>
+                                @endcan
                             @endif
 
                             @if (! $hasAction)

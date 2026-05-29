@@ -29,6 +29,10 @@
 
         <div class="p-6">
             <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                <div class="mb-4 rounded-lg bg-yellow-50 px-4 py-3 text-sm text-yellow-800">
+                    Direct permissions here are only for this employee. Permissions inherited from the Employee role are shown below and still grant access.
+                </div>
+
                 <form method="POST" action="{{ route('super-admin.employees.permissions.update', $employee) }}">
                     @csrf
                     @method('PATCH')
@@ -36,8 +40,14 @@
                     <div class="space-y-3">
                         @foreach ($permissions as $permission)
                             <label class="flex items-center gap-3 rounded-lg border border-gray-200 px-4 py-3">
-                                <input type="checkbox" name="permissions[]" value="{{ $permission->name }}" @checked(in_array($permission->name, $assignedPermissions, true)) class="rounded border-gray-300">
+                                <input type="checkbox" name="permissions[]" value="{{ $permission->name }}" @checked(in_array($permission->name, $directPermissions, true)) class="rounded border-gray-300">
                                 <span class="text-sm font-medium text-gray-800">{{ ucwords(str_replace(['-', '_'], ' ', $permission->name)) }}</span>
+
+                                @if (in_array($permission->name, $rolePermissions, true))
+                                    <span class="ml-auto rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-800">
+                                        Inherited
+                                    </span>
+                                @endif
                             </label>
                         @endforeach
                     </div>
@@ -59,6 +69,21 @@
                         </span>
                     @empty
                         <p class="text-sm text-gray-500">No direct permissions assigned.</p>
+                    @endforelse
+                </div>
+            </div>
+
+            <div class="mt-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                <h3 class="text-lg font-semibold text-gray-900">Inherited Role Permissions</h3>
+                <p class="mt-1 text-sm text-gray-600">These permissions come from the Employee role.</p>
+
+                <div class="mt-4 flex flex-wrap gap-2">
+                    @forelse ($rolePermissions as $permissionName)
+                        <span class="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
+                            {{ ucwords(str_replace(['-', '_'], ' ', $permissionName)) }}
+                        </span>
+                    @empty
+                        <p class="text-sm text-gray-500">No inherited role permissions.</p>
                     @endforelse
                 </div>
             </div>

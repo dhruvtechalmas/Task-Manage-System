@@ -22,12 +22,12 @@
                 </div>
 
                 <div class="flex items-center gap-4">
-                    @if (Auth::user()->can('create task'))
+                    @can('create task')
                         <a href="{{ route('tasks.create') }}" class="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white hover:bg-blue-700">
                             <i class="fas fa-plus"></i>
                             Create Task
                         </a>
-                    @endif
+                    @endcan
 
                     <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-indigo-700">
                         <i class="fas fa-user-circle text-lg"></i>
