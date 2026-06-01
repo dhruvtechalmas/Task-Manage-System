@@ -50,7 +50,9 @@ window.notificationDropdown = ({ userId, initialNotifications, initialUnreadCoun
                 ].slice(0, 8);
 
                 this.unreadCount += 1;
+                
             });
+
     },
 
     markAllRead() {

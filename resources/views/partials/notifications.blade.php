@@ -48,8 +48,7 @@
                 type="button"
                 x-on:click="markAllRead()"
                 x-show="unreadCount > 0"
-                class="text-xs font-semibold text-blue-700 hover:text-blue-900"
-            >
+                class="text-xs font-semibold text-blue-700 hover:text-blue-900">
                 Mark all read
             </button>
         </div>
@@ -59,8 +58,9 @@
                 <div class="px-4 py-6 text-sm text-gray-500">No notifications yet.</div>
             </template>
 
-            <template x-for="notification in notifications" :key="notification.id">
+            <template x-for="notification in notifications" :key="notification.id  ">
                 <div
+                     x-on:click="markAllRead()"
                     class="block border-b border-gray-100 px-4 py-3 transition hover:bg-gray-50"
                     :class="{ 'bg-blue-50/70': ! notification.read_at }">
                     
@@ -75,7 +75,7 @@
 
                         <button
                             type="button"
-                            x-on:click="deleteNotification(notification)"
+                           C="deleteNotification(notification)"
                             class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-gray-400 transition hover:bg-red-50 hover:text-red-600"
                             aria-label="Delete notification"
                             title="Delete notification"
