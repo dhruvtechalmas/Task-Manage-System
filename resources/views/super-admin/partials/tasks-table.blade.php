@@ -16,12 +16,12 @@
                     <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">Action</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-gray-200">
+    <tbody class="divide-y divide-gray-200">
                 @forelse ($tasks as $task)
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4 text-sm text-gray-600">{{ $task->id }}</td>
                         <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $task->title }}</td>
-                        <td class="px-6 py-4 text-sm text-gray-600">{{ $task->assignedTo->name }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-600">{{ $task->assignedTo?->name ?? 'Unassigned' }}</td>
                         <td class="px-6 py-4 text-sm text-gray-600">{{ ucwords(str_replace('_', ' ', $task->priority)) }}
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-600">{{ ucwords(str_replace('_', ' ', $task->status)) }}</td>

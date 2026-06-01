@@ -6,8 +6,10 @@ use App\Enums\UserRole;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
 
 class DashboardController extends Controller
 {
@@ -39,6 +41,7 @@ class DashboardController extends Controller
             'completedTasks' => $tasks->where('status', 'completed')->count(),
             'pendingTasks' => $tasks->where('status', 'pending')->count(),
             'inProgressTasks' => $tasks->where('status', 'in_progress')->count(),
+            ...$this->notificationData(request()->user()),
         ]);
     }
 
@@ -73,6 +76,21 @@ class DashboardController extends Controller
             'totalTasks' => $tasks->count(),
             'completedTasks' => $tasks->where('status', 'completed')->count(),
             'inProgressTasks' => $tasks->where('status', 'in_progress')->count(),
+            ...$this->notificationData($request->user()),
         ]);
+    }
+
+    /**
+     * @return array{dashboardNotifications: Collection<int, DatabaseNotification>, unreadNotificationsCount: int}
+     */
+    private function notificationData(User $user): array
+    {
+        return [
+            'dashboardNotifications' => $user->notifications()
+                ->latest()
+                ->limit(8)
+                ->get(),
+            'unreadNotificationsCount' => $user->unreadNotifications()->count(),
+        ];
     }
 }

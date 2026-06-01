@@ -52,23 +52,35 @@ class UserSeeder extends Seeder
             $user->syncRoles([UserRole::Employee->value]);
         });
 
-        $superAdmin = User::updateOrCreate([
-            'email' => 'superadmin@gmail.com',
-        ], [
-            'name' => 'Super Admin',
-            'password' => Hash::make('12345678'),
-        ]);
+        $superAdmins = [
+            ['name' => 'Super Admin', 'email' => 'superadmin@gmail.com'],
+        ];
 
-        $superAdmin->syncRoles([UserRole::SuperAdmin->value]);
+        foreach ($superAdmins as $superAdminData) {
+            $superAdmin = User::updateOrCreate([
+                'email' => $superAdminData['email'],
+            ], [
+                'name' => $superAdminData['name'],
+                'password' => Hash::make('12345678'),
+            ]);
 
-        $employee = User::updateOrCreate([
-            'email' => 'employee@gmail.com',
-        ], [
-            'name' => 'Employee',
-            'password' => Hash::make('12345678'),
-        ]);
+            $superAdmin->syncRoles([UserRole::SuperAdmin->value]);
+        }
 
-        $employee->syncRoles([UserRole::Employee->value]);
+        $employees = [
+            ['name' => 'Employee', 'email' => 'employee@gmail.com'],
+        ];
+
+        foreach ($employees as $employeeData) {
+            $employee = User::updateOrCreate([
+                'email' => $employeeData['email'],
+            ], [
+                'name' => $employeeData['name'],
+                'password' => Hash::make('12345678'),
+            ]);
+
+            $employee->syncRoles([UserRole::Employee->value]);
+        }
     }
 
     private function renameOldRole(string $oldName, string $newName): void
